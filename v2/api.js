@@ -1,68 +1,65 @@
-const controller = require('../controllers/controller');
+const controller = require('./controller');
 
 module.exports = function (app, router) {
   // Mount router under API
-  app.use('/api', router);
+  app.use('/api/v2', router);
 
-  router.get('/list', (req, res, next) => {
-    controller.get().then((data) => {
-      res.json({
-        currentList: data,
-        status: "ok"
-      });
-    }).catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: '500',
-        msg: err.toString(),
-      });
-    })
-  });
+  const available_routes = [
+    {
+      route: '/list',
+      description: 'Retrieve the current shopping list',
+      supported_methods: ['GET'],
+      method: router.get,
+      handler: (_, res, __) => {
+        controller.get().then((data) => {
+          res.json(data);
+        }).catch((err) => {
+          console.log(err);
+          res.status(500).send(err.toString());
+        });
+      }
+    },{
+      route: '/list/item/:id',
+      description: 'Retrieve a specific item from the current list by id',
+      supported_methods: ['GET'],
+      method: router.get,
+      handler: (req, res, _) => {
+        controller.get(req.params.id).then((data) => {
+          res.json(data);
+        }).catch((err) => {
+          console.log(err);
+          res.status(500).send(err.toString());
+        });
+      }
+    },{
+      route: '/lists',
+      description: 'Retrieve a set of identifiers for all *available* lists',
+      supported_methods: ['GET'],
+      method: router.get,
+      handler: (_, res, __) => {
+        controller.lists().then(lists => {
+          res.json(lists);
+        }).catch((err) => {
+          console.log(err);
+          res.status(400).json({
+            error: '400',
+            msg: err.toString(),
+          });
+        })
+      }
+    }
+  ];
 
-  // router.get('/committed', (req, res, next) => {
-  //   controller.committed().then((data) => {
-  //     res.json({
-  //       committed: data,
-  //       status: 'ok'
-  //     });
-  //   }).catch((err) => {
-  //     console.log(err);
-  //     res.status(500).json({
-  //       error: '500',
-  //       msg: err.toString(),
-  //     });
-  //   });
-  // });
+  const register = ({route, method, handler}) => {
+    method(route, handler);
+  };
 
-  router.get('/list/:id', (req, res, next) => {
-    controller.get(req.params.id).then((data) => {
-      res.json({
-        list: data,
-        status: "ok"
-      });
-    }).catch((err) => {
-      console.log(err);
-      res.status(500).json({
-        error: '500',
-        msg: err.toString(),
-      });
-    })
-  });
 
-  router.get('/lists', (req, res, next) => {
-    controller.lists().then(list => {
-      res.json({
-        archive: list,
-        status: "ok"
-      });
-    }).catch((err) => {
-      console.log(err);
-      res.status(400).json({
-        error: '400',
-        msg: err.toString(),
-      });
-    })
-  });
+  router.get('/list', );
+
+  router.get('/list/:id', );
+
+  router.get('/lists', );
 
   router.post('/add', (req, res, next) => {
     controller.add(req.body.entry).then((data) => {
