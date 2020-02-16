@@ -1,0 +1,40 @@
+version: '3.7'
+
+services: 
+  db:
+    container_name: pizza-v2-postgres
+    image: postgres:9.6-alpine
+    restart: always
+    environment: 
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
+    volumes: 
+      - ./db:/docker-entrypoint-initdb.d
+      - ./data:/var/lib/postgresql
+  app:
+    build: .
+    restart: always
+    image: listee-api:latest
+    container_name: listee-api
+    links:
+      - db
+    ports: 
+      - 8080:3000
+    environment: 
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_URL=pizza-v2-postgres
+  live:
+    image: node:alpine
+    links:
+      - db
+    ports:
+      - 8081:3000
+    environment: 
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_URL=pizza-v2-postgres
+    volumes:
+      - './:/app'
+    command:
+      sh -c 'cd /app && yarn && yarn start'
