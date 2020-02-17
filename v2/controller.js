@@ -1,22 +1,11 @@
-import { Pool } from 'pg';
-const pool = Pool();
-
-await pool.connect({
-  user: 'docker',
-  password: 'docker',
-  database: 'docker',
-  host: process.env.DB_URL,
-}).catch(err => setImmediate(() => {
-  throw err 
-}));
-
+const db = require('./db');
 /**
  * Adds a new item to the li if and only if its (exact) value is not yet present
  * @param {string} entry the new entry to the list
  */
 const _add = (data) => new Promise((resolve, reject) => {
   // INSERT INTO (SELECT id FROM lists WHERE status = 'active' LIMIT 1) VALUES ()
-  pool.query('INSERT INTO active-list (entry, creator, price) VALUES ($1, $2, $3)', 
+  db.query('INSERT INTO active_list (entry, creator, price) VALUES ($1, $2, $3)', 
     [data.entry, data.creator, data.price])
     .then(res => resolve(res.rows[0]))
     .catch(err => reject(err));
@@ -28,7 +17,7 @@ const _add = (data) => new Promise((resolve, reject) => {
  * @param {Object} data data object
  */
 const _rename = (id, data) => new Promise((resolve, reject) => {
-  pool.query('UPDATE active-list SET entry = $2, creator = $3, price = $4 WHERE id = $1', 
+  db.query('UPDATE active_list SET entry = $2, creator = $3, price = $4 WHERE id = $1', 
     [id, data.entry, data.creator, data.price])
     .then(res => resolve(res.rows[0]))
     .catch(err => reject(err));
@@ -39,7 +28,7 @@ const _rename = (id, data) => new Promise((resolve, reject) => {
  * @param {Number} id item id
  */
 const _delete = (id) => new Promise((resolve, reject) => {
-  pool.query('DELETE FROM active-list WHERE id = $1', [id])
+  db.query('DELETE FROM active_list WHERE id = $1', [id])
     .then(res => resolve(res.rows[0]))
     .catch(err => reject(err));
 });
@@ -48,7 +37,7 @@ const _delete = (id) => new Promise((resolve, reject) => {
  * Resets the current list
  */
 const _reset = () => new Promise((resolve, reject) => {
-  pool.query('DELETE FROM active-list WHERE 1')
+  db.query('DELETE FROM active_list WHERE 1')
     .then(res => resolve())
     .catch(err => reject(err));
 });
@@ -77,10 +66,10 @@ const _lists = (option) => new Promise((resolve, reject) => {
       which = `WHERE status = ${option}`;
       break;
     default:
-      which = `WHERE status = 'active' OR status = 'available'`;
+      which = `WHERE list_status = 'active' OR list_status = 'available'`;
       break;
   }
-  pool.query(`SELECT id, name, time, host FROM lists ${which}`)
+  db.query(`SELECT id, list_id, list_timestamp, host FROM lists ${which}`)
     .then(res => resolve(res.rows))
     .catch(err => reject(err));
 });
@@ -89,15 +78,18 @@ const _lists = (option) => new Promise((resolve, reject) => {
  * Get all items from a certain list, by default the active one
  * @param {string} listId 
  */
-const _get = (listId = 'active-list') => new Promise((resolve, reject) => {
-  client.query("SELECT * FROM $1", [listId])
+const _get = (listId = 'active_list') => new Promise((resolve, reject) => {
+  db.query("SELECT * FROM active_list")
     .then(res => resolve(res.rows))
     .catch(err => reject(err));
 });
 
-export const add = _add;
-export const rename = _rename;
-export const delete = _delete;
-export const reset = _reset;
-export const lists = _lists;
-export const get = _get;
+module.exports = {
+  add: _add,
+  rename: _rename,
+  delete: _delete,
+  lists: _lists,
+  get: _get,
+  reset: _reset,
+  next: _next,
+};
