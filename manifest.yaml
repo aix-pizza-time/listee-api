@@ -93,6 +93,35 @@ spec:
     requests:
       storage: 10Mi
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: listee-backend-storage-volume
+  namespace: web
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 512Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/srv/cluster/pizzabot/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: listee-backend-storage-claim
+  namespace: web
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -121,6 +150,8 @@ spec:
           name: postgredb
         - mountPath: /docker-entrypoint-initdb.d
           name: initialization
+        - mountPath: /static
+          name: backend-storage
       volumes:
       - name: postgredb
         persistentVolumeClaim:
