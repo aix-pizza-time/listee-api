@@ -8,7 +8,7 @@ module.exports = function (app, router) {
     controller.get().then((data) => {
       res.json({
         currentList: data,
-        status: "ok"
+        status: "deprecated"
       });
     }).catch((err) => {
       console.log(err);
@@ -38,7 +38,7 @@ module.exports = function (app, router) {
     controller.get(req.params.id).then((data) => {
       res.json({
         list: data,
-        status: "ok"
+        status: "deprecated"
       });
     }).catch((err) => {
       console.log(err);
@@ -53,7 +53,7 @@ module.exports = function (app, router) {
     controller.lists().then(list => {
       res.json({
         archive: list,
-        status: "ok"
+        status: "deprecated"
       });
     }).catch((err) => {
       console.log(err);
@@ -68,7 +68,7 @@ module.exports = function (app, router) {
     controller.add(req.body.entry).then((data) => {
       res.json({
         newEntry: data,
-        status: "ok"
+        status: "deprecated"
       });
       next();
     }).catch((err) => {
@@ -83,7 +83,7 @@ module.exports = function (app, router) {
   router.post('/commit', (req, res, next) => {
     controller.commit().then((data) => {
       res.json({
-        status: "ok",
+        status: "deprecated",
         lastState: data
       });
     }).catch((err) => {
@@ -98,7 +98,7 @@ module.exports = function (app, router) {
   router.post('/reset', (req, res, next) => {
     controller.reset().then((data) => {
       res.json({
-        status: "ok",
+        status: "deprecated",
         previousState: data
       });
     }).catch((err) => {
