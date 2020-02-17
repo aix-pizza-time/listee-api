@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:12-alpine
 
 LABEL maintainer="Alexander Bartolomey <occloxium@gmail.com>"
 
