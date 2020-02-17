@@ -2,7 +2,7 @@ CREATE TYPE status AS ENUM ('active', 'available', 'archived');
 
 CREATE TABLE IF NOT EXISTS lists (
   id bigserial PRIMARY KEY,
-  list_id text NOT NULL UNIQUE,
+  -- list_id bigserial UNIQUE,
   list_timestamp timestamptz DEFAULT CURRENT_TIMESTAMP,
   host text NOT NULL,
   list_status text NOT NULL
@@ -19,4 +19,4 @@ INSERT INTO active_list(entry, creator, price) VALUES ('Käse', 'Alex', 0.99);
 INSERT INTO active_list(entry, creator, price) VALUES ('Salami', 'Alex', 1.29);
 INSERT INTO active_list(entry, creator, price) VALUES ('Wein', 'Alex', 2.99);
 
-INSERT INTO lists(list_id, host, list_status) VALUES (1, 'Alex', 'active');
+INSERT INTO lists(host, list_status) VALUES ('tba', 'active');
