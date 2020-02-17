@@ -1,26 +1,22 @@
-CREATE TYPE status AS ENUM ('active', 'archived');
+CREATE TYPE status AS ENUM ('active', 'available', 'archived');
 
 CREATE TABLE IF NOT EXISTS lists (
-  `id` text PRIMARY KEY NOT NULL,
-  `listId` text NOT NULL UNIQUE,
-  `timestamp` timestamptz NOT NULL,
-  `host` text NOT NULL,
-  `status` status NOT NULL,
+  id bigserial PRIMARY KEY,
+  list_id text NOT NULL UNIQUE,
+  list_timestamp timestamptz DEFAULT CURRENT_TIMESTAMP,
+  host text NOT NULL,
+  list_status text NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS active (
-  `id` int NOT NULL PRIMARY KEY,
-  `entry` text NOT NULL UNIQUE,
-  `creator` text NOT NULL,
-  `price` real NOT NULL,
-)
+CREATE TABLE IF NOT EXISTS active_list (
+  id bigserial NOT NULL PRIMARY KEY,
+  entry text NOT NULL UNIQUE,
+  creator text NOT NULL,
+  price real NOT NULL
+);
 
-INSERT INTO active (`entry`, `creator`, `price`) VALUES (
-  "Käse", "Alex", 0.99
-)
-INSERT INTO active (`entry`, `creator`, `price`) VALUES (
-  "Salami", "Alex", 1.29
-)
-INSERT INTO active (`entry`, `creator`, `price`) VALUES (
-  "Wein", "Alex", 2.99
-)
+INSERT INTO active_list(entry, creator, price) VALUES ('Käse', 'Alex', 0.99);
+INSERT INTO active_list(entry, creator, price) VALUES ('Salami', 'Alex', 1.29);
+INSERT INTO active_list(entry, creator, price) VALUES ('Wein', 'Alex', 2.99);
+
+INSERT INTO lists(list_id, host, list_status) VALUES (1, 'Alex', 'active');
