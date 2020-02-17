@@ -5,13 +5,22 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(morgan('tiny'));
+if (process.env.NODE_ENV === 'production'){
+    app.use(morgan('tiny'));
+} else if (process.env.NODE_ENV === 'development'){
+    app.use(morgan('dev'));
+}
+
 app.use(bodyparser.json());
 app.use(cors());
 
-require('./routes/api.js')(app, express.Router());
+const routerV1 = express.Router();
+const routerV2 = express.Router();
 
-const port = 3000;
+const v1 = require('./v1/api.js')(app, routerV1);
+const v2 = require('./v2/api.js')(app, routerV2);
+
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);

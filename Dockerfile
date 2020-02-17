@@ -1,6 +1,6 @@
-FROM node:12
+FROM node:12-alpine
 
-LABEL maintainer="Alexander Bartolomey"
+LABEL maintainer="Alexander Bartolomey <occloxium@gmail.com>"
 
 WORKDIR /
 
@@ -12,4 +12,4 @@ COPY . .
 
 VOLUME [ "/static" ]
 
-ENTRYPOINT [ "bash", "docker-entrypoint.sh" ]
+ENTRYPOINT [ "yarn", "start" ]

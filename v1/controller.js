@@ -3,8 +3,8 @@ let {
   timestamp,
   initialize,
   commit
-} = require('../utils/');
-let _stash = require('../utils/').stash;
+} = require('./utils');
+let _stash = require('./utils').stash;
 
 data = initialize("./static");
 
