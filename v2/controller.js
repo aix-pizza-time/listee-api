@@ -46,9 +46,41 @@ const _reset = () => new Promise((resolve, reject) => {
  * Make a new archive table and export all current data to there
  * Clear active-list
  */
-const _next = () => new Promise((resolve, reject) => {
-  // 1. 
-  // 2. Update creation timestamp on active-list table
+const _next = () => new Promise(async (resolve, reject) => {
+  try {
+    // 1. Rename active_list to list_$timestamp 
+    const res = await db.query("SELECT id FROM lists WHERE list_status = 'active' ORDER BY list_timestamp DESC LIMIT 1");
+    const id = res.rows[0].id;
+    console.log(id);
+    await db.query(`ALTER TABLE active_list RENAME TO list_${id}$`);
+    
+    // 2. Create new active_list table from schema
+    await db.query(`CREATE TABLE active_list (
+      id bigserial NOT NULL PRIMARY KEY, 
+      entry text NOT NULL UNIQUE, 
+      creator text NOT NULL,
+      price real NOT NULL
+    )`);
+
+    // 3. Add new 'active' entry to lists
+    await db.query(`INSERT INTO lists(host, list_status) VALUES('tba', 'active')`);
+    resolve();
+  } catch (e) {
+    reject(e);
+  }
+});
+
+const _setHost = (host) => new Promise((resolve, reject) => {
+  db.query("UPDATE lists SET host = $1 WHERE list_status = 'active'", [host])
+    .then(_ => resolve(host))
+    .catch(err => reject(err));
+});
+
+
+const _getHost = () => new Promise((resolve, reject) => {
+  db.query("SELECT host FROM lists WHERE list_status = 'active'")
+    .then(host => resolve(host.rows[0]))
+    .catch(err => reject(err));
 });
 
 /**
@@ -69,7 +101,7 @@ const _lists = (option) => new Promise((resolve, reject) => {
       which = `WHERE list_status = 'active' OR list_status = 'available'`;
       break;
   }
-  db.query(`SELECT id, list_id, list_timestamp, host FROM lists ${which}`)
+  db.query(`SELECT * FROM lists ${which}`)
     .then(res => resolve(res.rows))
     .catch(err => reject(err));
 });
@@ -92,4 +124,6 @@ module.exports = {
   get: _get,
   reset: _reset,
   next: _next,
+  setHost: _setHost,
+  getHost: _getHost,
 };

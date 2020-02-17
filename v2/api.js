@@ -85,7 +85,43 @@ module.exports = function (app, router) {
           });
         }
       }
-    },
+    },{
+      route: '/host',
+      description: 'Set/Gets the host for the current gathering',
+      supported_methods: ['GET', 'POST'],
+      handler: {
+        GET: (_, res, __) => {
+          controller.getHost().then(host => {
+            res.json( host);
+          }).catch(err => {
+            console.log(err);
+            res.status(500).send(err.toSting());
+          });
+        },
+        POST: (req, res, __) => {
+          controller.getHost(req.body.host).then(host => {
+            res.json({host: host});
+          }).catch(err => {
+            console.log(err);
+            res.status(500).send(err.toSting());
+          });
+        },
+      }
+    },{
+      route: '/next',
+      description: 'Archives the current list and creates a new one',
+      supported_methods: ['GET'],
+      handler: {
+        GET: (_, res, __) => {
+          controller.next().then(_ => {
+            res.json({'success': true});
+          }).catch(err => {
+            console.log(err);
+            res.status(500).send(err.toSting());
+          });
+        }
+      }
+    }
   ];
 
   const active_routes = [];
