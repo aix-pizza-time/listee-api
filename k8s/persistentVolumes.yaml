@@ -3,12 +3,11 @@ apiVersion: v1
 metadata:
   name: listee-postgres-pv-volume
   labels:
-    type: local
-    app: postgres
+    app: listee-postgres
 spec:
   storageClassName: manual
   capacity:
-    storage: 5Gi
+    storage: 512Mi
   accessModes:
     - ReadWriteMany
   hostPath:
@@ -26,19 +25,18 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi
+      storage: 512Mi
 ---
 kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: listee-redis-pv-volume
   labels:
-    type: local
-    app: redis
+    app: listee-redis
 spec:
   storageClassName: manual
   capacity:
-    storage: 5Gi
+    storage: 512Mi
   accessModes:
     - ReadWriteMany
   hostPath:
@@ -56,33 +54,35 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: listee-backend-storage-volume
-  namespace: web
-  labels:
-    type: local
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 512Mi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/srv/cluster/pizzabot/data"
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: listee-backend-storage-claim
-  namespace: web
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
       storage: 512Mi
+# ---
+# @deprecated
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: listee-backend-storage-volume
+#   namespace: web
+#   labels:
+#     type: local
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 512Mi
+#   accessModes:
+#     - ReadWriteOnce
+#   hostPath:
+#     path: "/srv/cluster/pizzabot/data"
+# ---
+# @deprecated
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: listee-backend-storage-claim
+#   namespace: web
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 512Mi
