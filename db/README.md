@@ -4,9 +4,10 @@ Run
 ```sh
 kubectl create configmap listee-postgres-init-configmap --from-file ./
 ```
-to create a config map containing each initialization script in this directory.
+to create a ConfigMap containing each initialization script in this directory.
 
-Then, in your deployment manifest, include the configmap to your PostgreSQL deployment using
+Then, in your deployment manifest, include the ConfigMap to your PostgreSQL deployment using
+
 ```yaml
 containers:
 - name: my-postgres
