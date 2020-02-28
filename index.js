@@ -14,10 +14,10 @@ if (process.env.NODE_ENV === 'production'){
 app.use(bodyparser.json());
 app.use(cors());
 
-const routerV1 = express.Router();
+// const routerV1 = express.Router();
 const routerV2 = express.Router();
 
-const v1 = require('./v1/api.js')(app, routerV1);
+// const v1 = require('./v1/api.js')(app, routerV1);
 const v2 = require('./v2/api.js')(app, routerV2);
 
 const port = process.env.PORT || 3000;
