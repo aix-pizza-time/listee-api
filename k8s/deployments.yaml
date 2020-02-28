@@ -24,10 +24,15 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: config
+        - mountPath: /data
+          name: data
       volumes:
       - name: config
         configMap:
           name: listee-redis-configmap
+      - name: data
+        persistentVolumeClaim:
+          name: listee-redis-pv-claim
       restartPolicy: Always
 ---
 apiVersion: apps/v1
@@ -46,27 +51,25 @@ spec:
         app: listee-postgres
     spec:
       containers:
-      - name: pizza-v2-postgres
+      - name: listee-postgres
         image: postgres:alpine
         ports:
         - containerPort: 5432
         envFrom:
         - configMapRef:
-          name: postgres-config
+          name: listee-postgres-configmap
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
-          name: postgredb
+          name: data
         - mountPath: /docker-entrypoint-initdb.d
           name: initialization
-        - mountPath: /static
-          name: backend-storage
       volumes:
-      - name: postgredb
+      - name: data
         persistentVolumeClaim:
           claimName: listee-postgres-pv-claim
       - name: initialization
         configMap:
-          name: listee-postgres-init-
+          name: listee-postgres-init-configmap
       restartPolicy: Always
 ---
 apiVersion: apps/v1
