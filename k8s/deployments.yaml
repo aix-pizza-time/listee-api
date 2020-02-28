@@ -90,8 +90,10 @@ spec:
           value: production
         - name: PORT
           value: 3000
-        - name: DB_URL
-          value: pizza-v2-postgres
+        - name: POSTGRES_URL
+          value: listee-postgres
+        - name: REDIS_URL
+          value: listee-redis
         - name: HOST
           value: https://pizza.bartolomey.me
         imagePullSecrets:
