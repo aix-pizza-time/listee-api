@@ -3,10 +3,10 @@ const db = require('./db');
  * Adds a new item to the li if and only if its (exact) value is not yet present
  * @param {string} entry the new entry to the list
  */
-const _add = (data) => new Promise((resolve, reject) => {
+const _add = ({entry, creator, price}) => new Promise((resolve, reject) => {
   // INSERT INTO (SELECT id FROM lists WHERE status = 'active' LIMIT 1) VALUES ()
   db.query('INSERT INTO active_list (entry, creator, price) VALUES ($1, $2, $3)', 
-    [data.entry, data.creator, data.price])
+    [entry, creator, price])
     .then(res => resolve(res.rows[0]))
     .catch(err => reject(err));
 });
@@ -16,9 +16,9 @@ const _add = (data) => new Promise((resolve, reject) => {
  * @param {Number} id item id
  * @param {Object} data data object
  */
-const _rename = (id, data) => new Promise((resolve, reject) => {
+const _rename = (id, {entry, creator, price}) => new Promise((resolve, reject) => {
   db.query('UPDATE active_list SET entry = $2, creator = $3, price = $4 WHERE id = $1', 
-    [id, data.entry, data.creator, data.price])
+    [id, entry, creator, price])
     .then(res => resolve(res.rows[0]))
     .catch(err => reject(err));
 });
@@ -70,13 +70,19 @@ const _next = () => new Promise(async (resolve, reject) => {
   }
 });
 
+/**
+ * Set the host of the currently active list
+ * @param {String} host hostname
+ */
 const _setHost = (host) => new Promise((resolve, reject) => {
   db.query("UPDATE lists SET host = $1 WHERE list_status = 'active'", [host])
     .then(_ => resolve(host))
     .catch(err => reject(err));
 });
 
-
+/**
+ * Retrieve the hots of the currently active list
+ */
 const _getHost = () => new Promise((resolve, reject) => {
   db.query("SELECT host FROM lists WHERE list_status = 'active'")
     .then(host => resolve(host.rows[0]))
@@ -116,6 +122,18 @@ const _get = (listId = 'active_list') => new Promise((resolve, reject) => {
     .catch(err => reject(err));
 });
 
+const _learn = ({entry}) => new Promise((resolve, reject) => {
+  db.learn(entry)
+    .then(_ => resolve())
+    .catch(err => reject(err));
+});
+
+const _getLearned = () => new Promise((resolve, reject) => {
+  db.getLearned()
+    .then(learned => resolve(learned))
+    .catch(err => reject(err));
+});
+
 module.exports = {
   add: _add,
   rename: _rename,
@@ -126,4 +144,6 @@ module.exports = {
   next: _next,
   setHost: _setHost,
   getHost: _getHost,
+  learn: _learn,
+  getLearned: _getLearned,
 };
