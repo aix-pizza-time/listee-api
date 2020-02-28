@@ -3,13 +3,15 @@ kind: ConfigMap
 metadata:
   name: listee-redis-configmap
   namespace: web
+  labels:
+    app: listee-redis
 data:
   redis.conf: "bind 0.0.0.0"
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: listee-postgres-config
+  name: listee-postgres-configmap
   labels:
     app: listee-postgres
 data:
