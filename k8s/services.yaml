@@ -26,10 +26,10 @@ apiVersion: v1
 kind: Service
 metadata:
   namespace: web
-  name: listee-backend
+  name: listee-api
 spec:
   ports:
   - port: 8080
     targetPort: 8080
   selector:
-    app: listee-backend
+    app: listee-api
