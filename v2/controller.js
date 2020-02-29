@@ -37,7 +37,7 @@ const _delete = (id) => new Promise((resolve, reject) => {
  * Resets the current list
  */
 const _reset = () => new Promise((resolve, reject) => {
-  db.query('DELETE FROM active_list WHERE 1')
+  db.query('DELETE FROM active_list WHERE TRUE')
     .then(res => resolve())
     .catch(err => reject(err));
 });
