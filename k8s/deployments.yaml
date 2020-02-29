@@ -32,7 +32,7 @@ spec:
           name: listee-redis-configmap
       - name: data
         persistentVolumeClaim:
-          name: listee-redis-pv-claim
+          claimName: listee-redis-pv-claim
       restartPolicy: Always
 ---
 apiVersion: apps/v1
