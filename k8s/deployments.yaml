@@ -89,7 +89,7 @@ spec:
     spec:
       containers:
       - name: listee-api
-        image: registry.git.rwth-aachen.de/aix-pizza-time/listee-api:2.1.0
+        image: registry.git.rwth-aachen.de/aix-pizza-time/listee-api:2.1.1
         env:
         - name: NODE_ENV
           value: "production"
