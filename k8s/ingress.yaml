@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: listee-ingress
+  namespace: web
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/issuer: "letsencrypt-prod"
+spec:
+  tls: 
+  - hosts:
+    - pizza.bartolomey.me
+    secretName: listee-tls
+  rules:
+  - host: pizza.bartolomey.me
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: listee-web
+          servicePort: 80
+      - path: /api
+        backend:
+          serviceName: listee-api
+          servicePort: 3000

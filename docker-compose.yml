@@ -1,44 +1,58 @@
 version: '3.7'
 
 services: 
-  db:
-    container_name: pizza-v2-postgres
+  redis:
+    container_name: listee-redis
+    image: redis:latest
+    restart: always
+    command:
+    - redis-server
+    - --bind 0.0.0.0
+    volumes:
+    - redisdata:/data
+  postgres:
+    container_name: listee-postgres
     image: postgres:9.6-alpine
     restart: always
     environment: 
       POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
     volumes: 
-      - ./db:/docker-entrypoint-initdb.d
-      - pgdata:/var/lib/postgresql/data
+    - ./db:/docker-entrypoint-initdb.d
+    - pgdata:/var/lib/postgresql/data
   app:
     build: .
     restart: always
     image: listee-api:latest
     container_name: listee-api
     links:
-      - db
+    - postgres
+    - redis
     ports: 
-      - 8080:3000
+    - 8080:3000
     environment: 
-      - NODE_ENV=production
-      - PORT=3000
-      - DB_URL=pizza-v2-postgres
-      - HOST=http://localhost:8080
+    - NODE_ENV=production
+    - PORT=3000
+    - POSTGRES_URL=listee-postgres
+    - REDIS_URL=listee-redis
+    - HOST=http://localhost:8080
   live:
     image: node:alpine
     links:
-      - db
+    - postgres
+    - redis
     ports:
-      - 8081:3000
+    - 8081:3000
     environment: 
-      - NODE_ENV=development
-      - PORT=3000
-      - DB_URL=pizza-v2-postgres
-      - HOST=http://localhost:8081
+    - NODE_ENV=development
+    - PORT=3000
+    - POSTGRES_URL=listee-postgres
+    - REDIS_URL=listee-redis
+    - HOST=http://localhost:8081
     volumes:
-      - './:/app'
+    - './:/app'
     command:
       sh -c 'cd /app && yarn && yarn start'
 volumes: 
   pgdata: {}
+  redisdata: {}

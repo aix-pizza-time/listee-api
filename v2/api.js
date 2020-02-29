@@ -41,12 +41,16 @@ module.exports = function (app, router) {
           });
         },
         PUT: (req, res, _) => {
-          controller.rename(req.params.id, req.body.entry).then((data) => {
-            res.json(data);
+          Promise.all([
+            controller.rename(req.params.id, req.body),
+            controller.learn(req.body)
+          ]).then((data) => {
+            res.json(data[0]);
           }).catch((err) => {
             console.log(err);
             res.status(500).send(err.toString());
           });
+          
         },
         DELETE: (req, res, _) => {
           controller.delete(req.params.id).then((data) => {
@@ -62,13 +66,17 @@ module.exports = function (app, router) {
       description: 'Add a new item to the currently active list',
       supported_methods: ['POST'],
       handler: {
-        POST: (req, res, next) => {
-          controller.add(req.body.entry).then((data) => {
-            res.json(data);
+        POST: (req, res, _) => {
+          Promise.all([
+            controller.add(req.body),
+            controller.learn(req.body)
+          ]).then((data) => {
+            res.json(data[0]);
           }).catch((err) => {
             console.log(err);
             res.status(500).send(err.toString());
           });
+          
         },
       }
     },{
@@ -92,7 +100,7 @@ module.exports = function (app, router) {
       handler: {
         GET: (_, res, __) => {
           controller.getHost().then(host => {
-            res.json( host);
+            res.json(host);
           }).catch(err => {
             console.log(err);
             res.status(500).send(err.toSting());
@@ -119,6 +127,20 @@ module.exports = function (app, router) {
             console.log(err);
             res.status(500).send(err.toSting());
           });
+        }
+      }
+    },{
+      route: '/learn',
+      description: 'Gets the learned ingredients or adds a new one',
+      supported_methods: ['GET'],
+      handler: {
+        GET: (_, res, __) => {
+          controller.getLearned().then(ingredients => {
+            res.json(ingredients);
+          }).catch(err => {
+            console.log(err);
+            res.status(500).send(err.toString());
+          })
         }
       }
     }

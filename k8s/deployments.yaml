@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: web
+  name: listee-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: listee-redis
+  template:
+    metadata:
+      labels:
+        app: listee-redis
+    spec:
+      containers:
+      - name: listee-redis
+        image: redis:latest
+        ports:
+        - containerPort: 6379
+        command:
+        - redis-server
+        - "/config/redis.conf"
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /data
+          name: data
+      volumes:
+      - name: config
+        configMap:
+          name: listee-redis-configmap
+      - name: data
+        persistentVolumeClaim:
+          claimName: listee-redis-pv-claim
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: web
+  name: listee-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: listee-postgres
+  template:
+    metadata:
+      labels:
+        app: listee-postgres
+    spec:
+      containers:
+      - name: listee-postgres
+        image: postgres:alpine
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: listee-postgres-configmap
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: data
+        - mountPath: /docker-entrypoint-initdb.d
+          name: initialization
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: listee-postgres-pv-claim
+      - name: initialization
+        configMap:
+          name: listee-postgres-init-configmap
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: web
+  name: listee-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: listee-api
+  template:
+    metadata:
+      labels:
+        app: listee-api
+    spec:
+      containers:
+      - name: listee-api
+        image: registry.git.rwth-aachen.de/aix-pizza-time/listee-api:2.1.0
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3000"
+        - name: POSTGRES_URL
+          value: "listee-postgres"
+        - name: REDIS_URL
+          value: "listee-redis"
+        - name: HOST
+          value: "https://pizza.bartolomey.me"
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: gitlab
+      restartPolicy: Always
+
+# TODO add listee-web-v2 deployment
