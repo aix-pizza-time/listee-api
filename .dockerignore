@@ -1,0 +1,10 @@
+k8s/
+data/
+db/
+.vscode/
+.github/
+spec/
+node_modules/
+.editorconfig
+Dockerfile
+docker-compose.yml
