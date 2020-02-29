@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Page Title</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <script>
+    fetch('http://localhost:8081/api/v2/list/item', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        entry: 'Mozzarella',
+        price: 0.99,
+        creator: 'Alex'
+      })
+    }).catch(err => console.error(err)).then(res => res.json()).then(j => console.log(j));
+  </script>
+</head>
+<body>
+  
+</body>
+</html>
