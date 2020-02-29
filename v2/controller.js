@@ -122,12 +122,22 @@ const _get = (listId = 'active_list') => new Promise((resolve, reject) => {
     .catch(err => reject(err));
 });
 
+/**
+ * Learn a new ingredient
+ * @param {{entry: String}} entry the (new) ingredient to learn 
+ */
 const _learn = ({entry}) => new Promise((resolve, reject) => {
   db.learn(entry)
     .then(_ => resolve())
     .catch(err => reject(err));
 });
 
+/**
+ * Get all currently learned ingredients
+ * TODO this query can become expensive, depending on the size of the dataset.
+ * Introduce some sort of limit/pagination to reduce impact once the redis set
+ * gets filled up
+ */
 const _getLearned = () => new Promise((resolve, reject) => {
   db.getLearned()
     .then(learned => resolve(learned))

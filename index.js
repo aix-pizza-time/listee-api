@@ -23,5 +23,5 @@ const v2 = require('./v2/api.js')(app, routerV2);
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-    console.log(`Listening to port ${port}`);
+    console.log(`listee-api listening on port ${port}`);
 });

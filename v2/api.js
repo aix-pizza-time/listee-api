@@ -146,8 +146,10 @@ module.exports = function (app, router) {
     }
   ];
 
+  // array containing all active routes. This gets displayed at $HOST/api/v2
   const active_routes = [];
 
+  // Mount each route with the specific method 
   available_routes.forEach((r) => {
     r.supported_methods.forEach((m) => {
       switch(m){
@@ -174,6 +176,7 @@ module.exports = function (app, router) {
     });
   });
 
+  // Human-readable service discovery / service documentation
   router.get('/', (_, res, __) => {
     res.json(active_routes);
   })
