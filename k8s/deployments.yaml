@@ -94,7 +94,7 @@ spec:
         - name: NODE_ENV
           value: "production"
         - name: PORT
-          value: "3000"
+          value: "8080"
         - name: POSTGRES_URL
           value: "listee-postgres"
         - name: REDIS_URL
@@ -102,7 +102,7 @@ spec:
         - name: HOST
           value: "https://pizza.bartolomey.me"
         ports:
-        - containerPort: 3000
+        - containerPort: 8080
       imagePullSecrets:
       - name: gitlab
       restartPolicy: Always
