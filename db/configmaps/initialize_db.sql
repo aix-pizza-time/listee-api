@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS active_list (
   price real NOT NULL
 );
 
-INSERT INTO active_list(entry, creator, price) VALUES ('Käse', 'Alex', 0.99);
-INSERT INTO active_list(entry, creator, price) VALUES ('Salami', 'Alex', 1.29);
-INSERT INTO active_list(entry, creator, price) VALUES ('Wein', 'Alex', 2.99);
+-- INSERT INTO active_list(entry, creator, price) VALUES ('Käse', 'Alex', 0.99);
+-- INSERT INTO active_list(entry, creator, price) VALUES ('Salami', 'Alex', 1.29);
+-- INSERT INTO active_list(entry, creator, price) VALUES ('Wein', 'Alex', 2.99);
 
 INSERT INTO lists(host, list_status) VALUES ('tba', 'active');
