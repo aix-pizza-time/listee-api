@@ -2,7 +2,7 @@
 
 Run
 ```sh
-kubectl create configmap listee-postgres-init-configmap --from-file ./
+kubectl create configmap listee-postgres-init-configmap --from-file ./configmaps
 ```
 to create a ConfigMap containing each initialization script in this directory.
 
