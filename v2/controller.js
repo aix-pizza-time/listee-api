@@ -117,7 +117,7 @@ const _lists = (option) => new Promise((resolve, reject) => {
  * @param {string} listId 
  */
 const _get = (listId = 'active_list') => new Promise((resolve, reject) => {
-  db.query("SELECT * FROM active_list")
+  db.query("SELECT * FROM active_list ORDER BY id ASC")
     .then(res => resolve(res.rows))
     .catch(err => reject(err));
 });

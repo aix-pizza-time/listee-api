@@ -67,6 +67,7 @@ module.exports = function (app, router) {
       supported_methods: ['POST'],
       handler: {
         POST: (req, res, _) => {
+          console.log(req.body);
           Promise.all([
             controller.add(req.body),
             controller.learn(req.body)
