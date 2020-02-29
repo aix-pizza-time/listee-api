@@ -7,7 +7,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      apps: listee-redis
+      app: listee-redis
   template:
     metadata:
       labels:
@@ -57,7 +57,7 @@ spec:
         - containerPort: 5432
         envFrom:
         - configMapRef:
-          name: listee-postgres-configmap
+            name: listee-postgres-configmap
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: data
@@ -82,25 +82,29 @@ spec:
   selector:
     matchLabels:
       app: listee-api
+  template:
+    metadata:
+      labels:
+        app: listee-api
     spec:
       containers:
       - name: listee-api
-        image: registry.git.rwth-aachen.de/aix-pizza-time/listee-api:2.0.1
-        ports:
-        - containerPort: 3000
+        image: registry.git.rwth-aachen.de/aix-pizza-time/listee-api:2.1.0
         env:
         - name: NODE_ENV
-          value: production
+          value: "production"
         - name: PORT
-          value: 3000
+          value: "3000"
         - name: POSTGRES_URL
-          value: listee-postgres
+          value: "listee-postgres"
         - name: REDIS_URL
-          value: listee-redis
+          value: "listee-redis"
         - name: HOST
-          value: https://pizza.bartolomey.me
-        imagePullSecrets:
-        - name: gitlab
-        restartPolicy: Always
----
+          value: "https://pizza.bartolomey.me"
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: gitlab
+      restartPolicy: Always
+
 # TODO add listee-web-v2 deployment
