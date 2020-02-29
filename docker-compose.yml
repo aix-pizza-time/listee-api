@@ -36,23 +36,23 @@ services:
     - POSTGRES_URL=listee-postgres
     - REDIS_URL=listee-redis
     - HOST=http://localhost:8080
-  live:
-    image: node:alpine
-    links:
-    - postgres
-    - redis
-    ports:
-    - 8081:3000
-    environment: 
-    - NODE_ENV=development
-    - PORT=3000
-    - POSTGRES_URL=listee-postgres
-    - REDIS_URL=listee-redis
-    - HOST=http://localhost:8081
-    volumes:
-    - './:/app'
-    command:
-      sh -c 'cd /app && yarn && yarn start'
+  # live:
+  #   image: node:alpine
+  #   links:
+  #   - postgres
+  #   - redis
+  #   ports:
+  #   - 8081:3000
+  #   environment: 
+  #   - NODE_ENV=development
+  #   - PORT=3000
+  #   - POSTGRES_URL=listee-postgres
+  #   - REDIS_URL=listee-redis
+  #   - HOST=http://localhost:8081
+  #   volumes:
+  #   - './:/app'
+  #   command:
+  #     sh -c 'cd /app && yarn && yarn start'
 volumes: 
   pgdata: {}
   redisdata: {}
