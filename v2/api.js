@@ -41,12 +41,16 @@ module.exports = function (app, router) {
           });
         },
         PUT: (req, res, _) => {
-          controller.rename(req.params.id, req.body.entry).then((data) => {
-            res.json(data);
+          Promise.all([
+            controller.rename(req.params.id, req.body),
+            controller.learn(req.body)
+          ]).then((data) => {
+            res.json(data[0]);
           }).catch((err) => {
             console.log(err);
             res.status(500).send(err.toString());
           });
+          
         },
         DELETE: (req, res, _) => {
           controller.delete(req.params.id).then((data) => {
