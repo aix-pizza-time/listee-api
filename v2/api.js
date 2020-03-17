@@ -119,9 +119,9 @@ module.exports = function (app, router) {
     },{
       route: '/next',
       description: 'Archives the current list and creates a new one',
-      supported_methods: ['GET'],
+      supported_methods: ['POST'],
       handler: {
-        GET: (_, res, __) => {
+        POST: (_, res, __) => {
           controller.next().then(_ => {
             res.json({'success': true});
           }).catch(err => {

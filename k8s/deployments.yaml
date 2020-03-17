@@ -36,7 +36,7 @@ spec:
       restartPolicy: Always
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   namespace: web
   name: listee-postgres
@@ -70,10 +70,9 @@ spec:
       - name: initialization
         configMap:
           name: listee-postgres-init-configmap
-      restartPolicy: Always
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   namespace: web
   name: listee-api
