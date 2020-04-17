@@ -1,7 +1,7 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: listee-postgres-pv-volume
+  name: listee-postgres-pv
   labels:
     app: listee-postgres
 spec:
@@ -16,7 +16,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: listee-postgres-pv-claim
+  name: listee-postgres-pvc
   labels:
     app: listee-postgres
 spec:
@@ -30,7 +30,7 @@ spec:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: listee-redis-pv-volume
+  name: listee-redis-pv
   labels:
     app: listee-redis
 spec:
@@ -45,7 +45,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: listee-redis-pv-claim
+  name: listee-redis-pvc
   labels:
     app: listee-redis
 spec:
