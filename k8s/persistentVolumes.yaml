@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/srv/cluster/listee/postgres/data"
+    path: "/mnt/k8s/listee/postgres/data"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -40,7 +40,7 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: "/srv/cluster/listee/redis/data"
+    path: "/mnt/k8s/listee/redis/data"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -55,34 +55,3 @@ spec:
   resources:
     requests:
       storage: 512Mi
-# ---
-# @deprecated
-# apiVersion: v1
-# kind: PersistentVolume
-# metadata:
-#   name: listee-backend-storage-volume
-#   namespace: web
-#   labels:
-#     type: local
-# spec:
-#   storageClassName: manual
-#   capacity:
-#     storage: 512Mi
-#   accessModes:
-#     - ReadWriteOnce
-#   hostPath:
-#     path: "/srv/cluster/pizzabot/data"
-# ---
-# @deprecated
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: listee-backend-storage-claim
-#   namespace: web
-# spec:
-#   storageClassName: manual
-#   accessModes:
-#     - ReadWriteOnce
-#   resources:
-#     requests:
-#       storage: 512Mi
