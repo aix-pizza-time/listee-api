@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   namespace: web
   name: listee-redis
 spec:
+  serviceName: listee-redis
   replicas: 1
   selector:
     matchLabels:
@@ -26,6 +27,10 @@ spec:
           name: config
         - mountPath: /data
           name: data
+        resources:
+          limits:
+            cpu: "50m"
+            memory: 512Mi
       volumes:
       - name: config
         configMap:
@@ -64,6 +69,10 @@ spec:
           name: data
         - mountPath: /docker-entrypoint-initdb.d
           name: initialization
+        resources:
+          limits:
+            cpu: "50m"
+            memory: 512Mi
       volumes:
       - name: data
         persistentVolumeClaim:
@@ -73,12 +82,11 @@ spec:
           name: listee-postgres-init-configmap
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   namespace: web
   name: listee-api
 spec:
-  serviceName: listee-redis
   replicas: 1
   selector:
     matchLabels:
