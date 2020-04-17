@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   namespace: web
   name: listee-redis
 spec:
+  serviceName: listee-redis
   replicas: 1
   selector:
     matchLabels:
@@ -26,13 +27,17 @@ spec:
           name: config
         - mountPath: /data
           name: data
+        resources:
+          limits:
+            cpu: "50m"
+            memory: 512Mi
       volumes:
       - name: config
         configMap:
           name: listee-redis-configmap
       - name: data
         persistentVolumeClaim:
-          claimName: listee-redis-pv-claim
+          claimName: listee-redis-pvc
       restartPolicy: Always
 ---
 apiVersion: apps/v1
@@ -41,6 +46,7 @@ metadata:
   namespace: web
   name: listee-postgres
 spec:
+  serviceName: listee-postgres
   replicas: 1
   selector:
     matchLabels:
@@ -63,16 +69,20 @@ spec:
           name: data
         - mountPath: /docker-entrypoint-initdb.d
           name: initialization
+        resources:
+          limits:
+            cpu: "50m"
+            memory: 512Mi
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: listee-postgres-pv-claim
+          claimName: listee-postgres-pvc
       - name: initialization
         configMap:
           name: listee-postgres-init-configmap
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   namespace: web
   name: listee-api
