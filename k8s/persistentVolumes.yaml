@@ -3,7 +3,8 @@ apiVersion: v1
 metadata:
   name: listee-postgres-pv
   labels:
-    app: listee-postgres
+    app: listee
+    svc: postgres
 spec:
   storageClassName: manual
   capacity:
@@ -18,7 +19,8 @@ apiVersion: v1
 metadata:
   name: listee-postgres-pvc
   labels:
-    app: listee-postgres
+    app: listee
+    svc: postgres
 spec:
   storageClassName: manual
   accessModes:
@@ -32,7 +34,8 @@ apiVersion: v1
 metadata:
   name: listee-redis-pv
   labels:
-    app: listee-redis
+    app: listee
+    svc: redis
 spec:
   storageClassName: manual
   capacity:
@@ -47,7 +50,8 @@ apiVersion: v1
 metadata:
   name: listee-redis-pvc
   labels:
-    app: listee-redis
+    app: listee
+    svc: redis
 spec:
   storageClassName: manual
   accessModes:

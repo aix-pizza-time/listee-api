@@ -3,16 +3,21 @@ kind: StatefulSet
 metadata:
   namespace: web
   name: listee-redis
+  labels:
+    app: listee
+    svc: redis
 spec:
   serviceName: listee-redis
   replicas: 1
   selector:
     matchLabels:
-      app: listee-redis
+      app: listee
+      svc: redis
   template:
     metadata:
       labels:
-        app: listee-redis
+        app: listee
+        svc: redis
     spec:
       containers:
       - name: listee-redis
@@ -45,16 +50,21 @@ kind: StatefulSet
 metadata:
   namespace: web
   name: listee-postgres
+  labels:
+    app: listee
+    svc: postgres
 spec:
   serviceName: listee-postgres
   replicas: 1
   selector:
     matchLabels:
-      app: listee-postgres
+      app: listee
+      svc: postgres
   template:
     metadata:
       labels:
-        app: listee-postgres
+        app: listee
+        svc: postgres
     spec:
       containers:
       - name: listee-postgres
@@ -79,22 +89,27 @@ spec:
           claimName: listee-postgres-pvc
       - name: initialization
         configMap:
-          name: listee-postgres-init-configmap
+          name: listee-postgres-configmap
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: web
   name: listee-api
+  labels:
+    app: listee
+    svc: api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: listee-api
+      app: listee
+      svc: api
   template:
     metadata:
       labels:
-        app: listee-api
+        app: listee
+        svc: api
     spec:
       containers:
       - name: listee-api
@@ -115,5 +130,3 @@ spec:
       imagePullSecrets:
       - name: gitlab
       restartPolicy: Always
-
-# TODO add listee-web-v2 deployment

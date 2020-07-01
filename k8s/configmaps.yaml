@@ -4,7 +4,8 @@ metadata:
   name: listee-redis-configmap
   namespace: web
   labels:
-    app: listee-redis
+    app: listee
+    svc: redis
 data:
   redis.conf: "bind 0.0.0.0"
 ---
@@ -13,7 +14,8 @@ kind: ConfigMap
 metadata:
   name: listee-postgres-configmap
   labels:
-    app: listee-postgres
+    app: listee
+    svc: postgres
 data:
   POSTGRES_DB: docker
   POSTGRES_USER: docker

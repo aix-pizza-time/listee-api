@@ -3,33 +3,45 @@ kind: Service
 metadata:
   namespace: web
   name: listee-redis
+  labels:
+    app: listee
+    svc: redis
 spec:
   ports:
   - port: 6379
     targetPort: 6379
   selector:
-    app: listee-redis
+    app: listee
+    svc: redis
 ---
 apiVersion: v1
 kind: Service
 metadata:
   namespace: web
   name: listee-postgres
+  labels:
+    app: listee
+    svc: postgres
 spec:
   ports:
   - port: 5432
     targetPort: 5432
   selector:
-    app: listee-postgres
+    app: listee
+    svc: postgres
 ---
 apiVersion: v1
 kind: Service
 metadata:
   namespace: web
   name: listee-api
+  labels:
+    app: listee
+    svc: api
 spec:
   ports:
   - port: 8080
     targetPort: 8080
   selector:
-    app: listee-api
+    app: listee
+    svc: api
